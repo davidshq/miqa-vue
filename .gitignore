@@ -27,5 +27,7 @@ coverage
 *.sln
 *.sw?
 
+# Test Related
 test-results/
 playwright-report/
+medical-images/
