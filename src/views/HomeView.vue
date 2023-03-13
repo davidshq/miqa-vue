@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import HelloWorld from '../components/HelloWorld.vue'
+import SimpleITK from '../components/SimpleITK.vue'
 </script>
 
 <template>
   <main>
-    <HelloWorld />
+    <SimpleITK />
   </main>
 </template>
