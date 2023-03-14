@@ -93,6 +93,10 @@ This section can be a bit convoluted it traces a simplified path through the pro
 ### VTK.js
 - Adding VTK.js to a Vue 3.x project is pretty straightforward but the example code doesn't work out of the box (due to conflict with Vue's default styling). These modifications have already been made in this project, but if attempting to use VTK.js with another project see this [StackOverflow post](https://stackoverflow.com/questions/75724232/when-using-vue-3-with-vtk-js-why-doesnt-the-render-display-on-the-screen) for instructions on how to get VTK.js to work in a Vue 3.x project.
 
+#### Resources
+- [Official VTK/Vue Tutorial](https://kitware.github.io/vtk-js/docs/vtk_vue.html)
+- [When using Vue 3 with VTK.js why doesn't the render display on the screen?](https://stackoverflow.com/questions/75724232/when-using-vue-3-with-vtk-js-why-doesnt-the-render-display-on-the-screen)
+
 ### ITK-wasm
 - Adding ITK-wasm to a Vue 3.x project, on the other hand, is a bit more complicated.
 
