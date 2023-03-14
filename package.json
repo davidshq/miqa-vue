@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@kitware/vtk.js": "^26.8.2",
+    "curry": "^1.2.0",
     "itk-image-io": "^1.0.0-b.18",
     "itk-mesh-io": "^1.0.0-b.18",
     "itk-wasm": "^1.0.0-b.18",
