@@ -1,12 +1,14 @@
 <template>
-  <!-- Input selector -->
   <div>
-    <label>Select image or mesh:</label>
-    <input name="inputFile" type="file" />
-  </div>
+    <!-- Input selector -->
+    <div>
+      <label>Select image or mesh:</label><br />
+      <input name="inputFile" type="file" />
+    </div>
 
-  <!-- File information -->
-  <textarea readonly name="fileInformation">File information...</textarea>
+    <!-- File information -->
+    <textarea readonly name="fileInformation">File information...</textarea>
+  </div>
 </template>
 
 <script setup>
@@ -22,6 +24,7 @@ const outputFileInformation = curry(function outputFileInformation (
   outputTextArea.textContent = 'Loading...'
 
   const dataTransfer = event.dataTransfer
+  console.debug('dataTransfer', dataTransfer);
   const files = event.target.files || dataTransfer.files
 
   return readFile(null, files[0])
