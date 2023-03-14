@@ -19,6 +19,8 @@
 ## Introduction
 MIQA Vue is an attempt to rewrite the Vue 2.x UI provided with MIQA in Vue 3.x.
 
+NOTE: This means significant portions of the code base are pulled from the [official MIQA repository](https://github.com/OpenImaging/miqa/web_client).
+
 ## Current Status
 Currently:
 1. VTK and ITK have been successfully added to and configured for the project.
