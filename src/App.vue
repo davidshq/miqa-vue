@@ -13,6 +13,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/simpleitk">SimpleITK</RouterLink>
         <RouterLink to="/simplevtk">SimpleVTK</RouterLink>
         <RouterLink to="/simpleitkvtk">SimpleITKVTK</RouterLink>
+        <RouterLink to="/itkvtkviewer">ITKVTKViewer</RouterLink>
       </nav>
     </div>
   </header>
