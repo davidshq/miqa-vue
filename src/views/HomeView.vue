@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import SimpleITK from '../components/SimpleITK.vue'
+import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
   <main>
-    <SimpleITK />
+    <TheWelcome />
   </main>
 </template>
