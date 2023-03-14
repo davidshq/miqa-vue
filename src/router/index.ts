@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SimpleVTKVue from '../views/SimpleVTKView.vue'
 import SimpleITKVue from '../components/SimpleITK.vue'
+import SimpleITKVTKIntegrate from '../components/SimpleITKVTKIntegrate.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,11 @@ const router = createRouter({
       path: '/simpleitk',
       name: 'simpleitk',
       component: SimpleITKVue
+    },
+    {
+      path: '/simpleitkvtk',
+      name: 'simpleitkvtk',
+      component: SimpleITKVTKIntegrate
     }
   ]
 })
