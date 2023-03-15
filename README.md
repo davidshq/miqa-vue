@@ -28,6 +28,7 @@ Currently:
 1. VTK and ITK have been successfully added to and configured for the project.
 2. A slightly modified version of the code found in the [official VTK/Vue tutorial](https://kitware.github.io/vtk-js/docs/vtk_vue.html) has been implemented.
 3. A slightly modified version of the [Vite ITK-wasm example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/vite) has been implemented in Vue.
+4. A modified version of the [VTK.js Proxy Manager example](https://kitware.github.io/vtk-js/examples/ProxyManager.html) is now wired up to display the images that are loaded by ITK-wasm and converted by VTK.js.
 
 This means the basic code/setup for Vue/ITK is operational.
 
@@ -98,6 +99,7 @@ I'm attempting to implement one feature at a time so you can look at various bra
 
 - `add-itk` - Covers the integration of ITM-wasm into the project, which can be a challenge. See the README in that branch for additional details on the issues and how to work around them.
 - `add-nii-gz` - Adds a basic implementation of ITK within the Vue app.
+- `load-image` - Wired a modified version of the VTK.js ProxyManager example up to the ITK loader/VTK converter, now renders an image.
 
 ## Resources & Notes
 - The README varies based on the branch one is currently on. Please see the Learning Branches section to learn more about the various branches and what they cover.
@@ -105,6 +107,7 @@ I'm attempting to implement one feature at a time so you can look at various bra
 ### VTK.js
 - [Official VTK/Vue Tutorial](https://kitware.github.io/vtk-js/docs/vtk_vue.html)
 - [When using Vue 3 with VTK.js why doesn't the render display on the screen?](https://stackoverflow.com/questions/75724232/when-using-vue-3-with-vtk-js-why-doesnt-the-render-display-on-the-screen)
+- [VTK.js ItkWasmVolume Example](https://kitware.github.io/vtk-js/examples/ItkWasmVolume.html)
 
 ### ITK-wasm
 - [Official ITK.js to ITK-wasm Migration Guide](https://wasm.itk.org/docs/itk_js_to_itk_wasm_migration_guide)
