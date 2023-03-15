@@ -8,9 +8,10 @@
     - Install
     - Development
     - Production
+    - Lint
+- Testing
     - Unit Tests
     - E2E Tests
-    - Lint
 - Recommended IDE Setup
 - Learning Branches
 - Resources & Notes
@@ -54,6 +55,13 @@ npm run dev
 npm run build
 ```
 
+### Lint with [ESLint](https://eslint.org/)
+```sh
+npm run lint
+```
+
+## Testing
+
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
@@ -79,11 +87,6 @@ npm run test:e2e -- tests/example.spec.ts
 npm run test:e2e -- --debug
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
-```
 
 ## Recommended IDE Setup
 - [VSCode](https://code.visualstudio.com/)
