@@ -7,11 +7,12 @@
 <script setup>
   import { onMounted } from 'vue';
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
-  import state from '../state';
+  import { useMiqaStore } from '../stores/miqa';
   import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
   import '@kitware/vtk.js/Rendering/Profiles/Volume';
   import proxyConfiguration from '../utils/vtk/proxy';
 
+  const store = useMiqaStore();
   // Create proxy manager
   const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
 
@@ -27,7 +28,7 @@
   // Create source eproxy
   let representation3DProxy;
       const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
-      sourceProxy.setInputData(state.vtkImage);
+      sourceProxy.setInputData(store.vtkImage);
 
   // Create representation proxy for 3D view
   representation3DProxy = proxyManager.getRepresentation(
