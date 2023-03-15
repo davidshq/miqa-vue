@@ -15,6 +15,7 @@
   import { readFile } from 'itk-wasm'
   import curry from 'curry'
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper'
+  import state from '../state';
 
   const { convertItkToVtkImage } = ITKHelper
   
@@ -35,15 +36,7 @@
       webWorker.terminate()
       const imageOrMesh = image || mesh
 
-      const vtkImage = convertItkToVtkImage(imageOrMesh)
-
-      // Get range of point data in image
-      const dataRange = vtkImage
-        .getPointData()
-        .getArray(0)
-        .getRange()
-
-      console.debug(dataRange);
+      state.vtkImage = convertItkToVtkImage(imageOrMesh)
   
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {
