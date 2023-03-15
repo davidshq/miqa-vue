@@ -12,9 +12,11 @@
   
   <script setup>
   import { onMounted } from 'vue';
-  import { readFile } from 'itk-wasm'
-  import curry from 'curry'
-  import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper'
+  import { readFile } from 'itk-wasm';
+  import curry from 'curry';
+  import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
+  import state from '../state';
+  import { setupProxyManager, setupSourceProxy, prepareProxyManager } from '../utils/setupProxy';
 
   const { convertItkToVtkImage } = ITKHelper
   
@@ -36,6 +38,17 @@
       const imageOrMesh = image || mesh
 
       const vtkImage = convertItkToVtkImage(imageOrMesh)
+      state.file = vtkImage;
+
+      async function proxyStuff() {
+        await setupProxyManager( state );
+        await setupSourceProxy( state );
+        await prepareProxyManager( state );
+        console.log('Viewer State', state);
+      }
+      proxyStuff();
+      
+      
 
       // Get range of point data in image
       const dataRange = vtkImage
