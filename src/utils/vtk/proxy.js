@@ -1,12 +1,12 @@
-import vtk2DView from 'vtk.js/Sources/Proxy/Core/View2DProxy';
-import vtkLookupTableProxy from 'vtk.js/Sources/Proxy/Core/LookupTableProxy';
-import vtkPiecewiseFunctionProxy from 'vtk.js/Sources/Proxy/Core/PiecewiseFunctionProxy';
-import vtkProxySource from 'vtk.js/Sources/Proxy/Core/SourceProxy';
-import vtkSliceRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/SliceRepresentationProxy';
-import vtkView from 'vtk.js/Sources/Proxy/Core/ViewProxy';
-import vtkVolumeRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/VolumeRepresentationProxy';
-import vtkGeometryRepresentationProxy from 'vtk.js/Sources/Proxy/Representations/GeometryRepresentationProxy';
-import 'vtk.js/Sources/Rendering/Profiles/All';
+import vtk2DView from '@kitware/vtk.js/Proxy/Core/View2DProxy';
+import vtkLookupTableProxy from '@kitware/vtk.js/Proxy/Core/LookupTableProxy';
+import vtkPiecewiseFunctionProxy from '@kitware/vtk.js/Proxy/Core/PiecewiseFunctionProxy';
+import vtkProxySource from '@kitware/vtk.js/Proxy/Core/SourceProxy';
+import vtkSliceRepresentationProxy from '@kitware/vtk.js/Proxy/Representations/SliceRepresentationProxy';
+import vtkView from '@kitware/vtk.js/Proxy/Core/ViewProxy';
+import vtkVolumeRepresentationProxy from '@kitware/vtk.js/Proxy/Representations/VolumeRepresentationProxy';
+import vtkGeometryRepresentationProxy from '@kitware/vtk.js/Proxy/Representations/GeometryRepresentationProxy';
+import '@kitware/vtk.js/Rendering/Profiles/All';
 
 import ConfigUtils from './configUtils';
 
