@@ -19,11 +19,12 @@
   import { readFile } from 'itk-wasm';
   import curry from 'curry';
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
-  import state from '../state';
+  import { useMiqaStore } from '../stores/miqa';
   import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
   import '@kitware/vtk.js/Rendering/Profiles/Volume';
   import proxyConfiguration from '../utils/vtk/proxy';
 
+  const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper;
 
   const outputFileInformation = curry(function outputFileInformation (
@@ -44,7 +45,7 @@
       const imageOrMesh = image || mesh
 
       const vtkImage = convertItkToVtkImage(imageOrMesh)
-      state.file = vtkImage;
+      store.file = vtkImage;
 
       // Create proxy manager
       const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });

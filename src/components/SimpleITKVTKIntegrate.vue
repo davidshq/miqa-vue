@@ -15,8 +15,9 @@
   import { readFile } from 'itk-wasm'
   import curry from 'curry'
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper'
-  import state from '../state';
+  import { useMiqaStore } from '../stores/miqa';
 
+  const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper
   
   const outputFileInformation = curry(function outputFileInformation (
@@ -36,7 +37,7 @@
       webWorker.terminate()
       const imageOrMesh = image || mesh
 
-      state.vtkImage = convertItkToVtkImage(imageOrMesh)
+      store.vtkImage = convertItkToVtkImage(imageOrMesh)
   
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {

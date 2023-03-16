@@ -100,9 +100,14 @@ I'm attempting to implement one feature at a time so you can look at various bra
 - `add-itk` - Covers the integration of ITM-wasm into the project, which can be a challenge. See the README in that branch for additional details on the issues and how to work around them.
 - `add-nii-gz` - Adds a basic implementation of ITK within the Vue app.
 - `load-image` - Wired a modified version of the VTK.js ProxyManager example up to the ITK loader/VTK converter, now renders an image.
+- `add-pinia` - Refactors project to make use of Pinia, basic implementation.
 
 ## Resources & Notes
 - The README varies based on the branch one is currently on. Please see the Learning Branches section to learn more about the various branches and what they cover.
+
+### Pinia
+- [How to Handle State Management in Vue using Pinia](https://coderpad.io/blog/development/how-to-handle-state-management-in-vue-using-pinia/)
+  - There seems to be a number of articles covering using Pinia with the options style but very few covering using it with the composition style. This article starts with the options style but then addresses the composition style with some detail.
 
 ### VTK.js
 - [Official VTK/Vue Tutorial](https://kitware.github.io/vtk-js/docs/vtk_vue.html)
