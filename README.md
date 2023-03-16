@@ -3,6 +3,7 @@
 ## Table of Contents
 - Introduction
 - Current Status
+- Next Steps
 - Customize configuration
 - Project Setup
     - Install
@@ -31,6 +32,11 @@ Currently:
 4. A modified version of the [VTK.js Proxy Manager example](https://kitware.github.io/vtk-js/examples/ProxyManager.html) is now wired up to display the images that are loaded by ITK-wasm and converted by VTK.js.
 
 This means the basic code/setup for Vue/ITK is operational.
+
+## Next Steps
+The `miqa-vtk` branch was created to integrate the VTK code in the existing MIQA codebase into the new Vue 3.x codebase. This will be core rendering, not additional features like crosshairs.
+
+If this is completed successfully then I should be able to move on to implementing crosshairs.
 
 ## Customize configuration
 
