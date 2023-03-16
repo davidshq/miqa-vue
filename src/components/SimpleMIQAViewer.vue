@@ -24,21 +24,25 @@
   const { convertItkToVtkImage } = ITKHelper;
 
   async function loadImage (event) {
-      console.log('Running loadImage');
+    console.log('Running loadImage');
 
-      const dataTransfer = event.dataTransfer;
-      console.debug('dataTransfer', dataTransfer);
-      const files = event.target.files || dataTransfer.files
+    const dataTransfer = event.dataTransfer;
+    console.debug('dataTransfer', dataTransfer);
+    const files = event.target.files || dataTransfer.files
 
-      // Use ITK to read the file
-      const loadedFile = await readFile(null, files[0]);
-      const { image, mesh, webWorker } = loadedFile;
+    // Use ITK to read the file
+    const loadedFile = await readFile(null, files[0]);
+    const {image, mesh, webWorker} = loadedFile;
 
-      webWorker.terminate()
-      const imageOrMesh = image || mesh
+    webWorker.terminate()
+    await displayImage(image || mesh);
+  }
+
+  async function displayImage(image) {
+      console.log('Running displayImage');
 
       // Convert file into a format VTK can understand
-      const vtkImage = convertItkToVtkImage(imageOrMesh)
+      const vtkImage = convertItkToVtkImage(image)
       store.file = vtkImage;
 
       // Create proxy manager
