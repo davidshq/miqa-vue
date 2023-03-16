@@ -73,9 +73,9 @@
           console.debug('actor', actor);
           actor.getProperty().setRepresentation(rep);
           console.debug('renderWindow', renderWindow);
-          renderWindow.render();
-          console.groupEnd();
+          renderWindow.render()
         }
+        console.groupEnd();
       });
   
       onMounted(() => {

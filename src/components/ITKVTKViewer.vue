@@ -5,7 +5,7 @@
         <input name="inputFile" type="file" />
       </div>
       <br />
-  
+
       <textarea readonly name="fileInformation" rows="20" cols="40">File information...</textarea>
 
       <div id="mainContainer" style="min-width:100px;min-height:100px;border:10px;color:white;">
@@ -13,7 +13,7 @@
       </div>
     </div>
   </template>
-  
+
   <script setup>
   import { onMounted } from 'vue';
   import { readFile } from 'itk-wasm';
@@ -33,7 +33,7 @@
   ) {
     console.log('Running outputFileInformation');
     outputTextArea.textContent = 'Loading...'
-  
+
     const dataTransfer = event.dataTransfer
     console.debug('dataTransfer', dataTransfer);
     const files = event.target.files || dataTransfer.files
@@ -44,6 +44,7 @@
       webWorker.terminate()
       const imageOrMesh = image || mesh
 
+      // Convert file into a format VTK can understand
       const vtkImage = convertItkToVtkImage(imageOrMesh)
       store.file = vtkImage;
 
@@ -59,7 +60,7 @@
       view3DProxy
         .getOpenGLRenderWindow();
 
-      // Create source eproxy
+      // Create source proxy
       let representation3DProxy;
       const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
       sourceProxy.setInputData(vtkImage);
@@ -71,7 +72,7 @@
       );
       view3DProxy.resetCamera();
 
-  
+
       function replacer (key, value) {
         if (!!value && value.byteLength !== undefined) {
           return String(value.slice(0, 6)) + '...'
@@ -81,7 +82,7 @@
       outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4)
     })
   })
-  
+
   onMounted(() => {
     console.group('Running onMounted');
     const outputTextArea = document.querySelector('textarea')
