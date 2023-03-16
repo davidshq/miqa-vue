@@ -25,7 +25,7 @@
   const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper;
 
-  const outputFileInformation = curry(function outputFileInformation (
+  const loadImage = curry(function loadImage (
     event
   ) {
     console.log('Running outputFileInformation');
@@ -72,9 +72,9 @@
 
   onMounted(() => {
     console.group('Running onMounted');
-    const handleFile = outputFileInformation()
+    const handleFile = loadImage()
     const fileInput = document.querySelector('input')
-    fileInput.addEventListener('change', handleFile)
+    fileInput.addEventListener('change', )
     console.groupEnd();
   });
   </script>
