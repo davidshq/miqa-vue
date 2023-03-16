@@ -2,7 +2,7 @@
     <div>
       <div>
         <label>Select image or mesh:</label><br />
-        <input name="inputFile" type="file" />
+        <input name="inputFile" type="file" @change="loadImage" />
       </div>
       <br />
 
@@ -13,9 +13,7 @@
   </template>
 
   <script setup>
-  import { onMounted } from 'vue';
   import { readFile } from 'itk-wasm';
-  import curry from 'curry';
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
   import { useMiqaStore } from '../stores/miqa';
   import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
@@ -25,18 +23,17 @@
   const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper;
 
-  const loadImage = curry(function loadImage (
-    event
-  ) {
-    console.log('Running outputFileInformation');
+  async function loadImage (event) {
+      console.log('Running loadImage');
 
-    const dataTransfer = event.dataTransfer
-    console.debug('dataTransfer', dataTransfer);
-    const files = event.target.files || dataTransfer.files
+      const dataTransfer = event.dataTransfer;
+      console.debug('dataTransfer', dataTransfer);
+      const files = event.target.files || dataTransfer.files
 
-    // Use ITK to read the file
-    readFile(null, files[0])
-    .then(({ image, mesh, webWorker }) => {
+      // Use ITK to read the file
+      const loadedFile = await readFile(null, files[0]);
+      const { image, mesh, webWorker } = loadedFile;
+
       webWorker.terminate()
       const imageOrMesh = image || mesh
 
@@ -53,8 +50,7 @@
       // Create view proxy for 3D
       const view3DProxy = proxyManager.createProxy('Views', 'View3D');
       view3DProxy.setContainer(view3DContainer);
-      view3DProxy
-        .getOpenGLRenderWindow();
+      view3DProxy.getOpenGLRenderWindow();
 
       // Create source proxy
       let representation3DProxy;
@@ -63,18 +59,9 @@
 
       // Create representation proxy for 3D view
       representation3DProxy = proxyManager.getRepresentation(
-        sourceProxy,
-        view3DProxy
+          sourceProxy,
+          view3DProxy
       );
       view3DProxy.resetCamera();
-    })
-  })
-
-  onMounted(() => {
-    console.group('Running onMounted');
-    const handleFile = loadImage()
-    const fileInput = document.querySelector('input')
-    fileInput.addEventListener('change', )
-    console.groupEnd();
-  });
+  }
   </script>
