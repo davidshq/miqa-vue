@@ -7,8 +7,9 @@
 ### configUtils.js
 - `activateOnCreate`'s `def` parameter is now `proxyDefinition`.
 
-### ColorMaps.js
-- Calls to `createGroup` have been moved out of `export default` and into `const {nameOfGroup}`, with the `nameOfGroup` taking their place in the export.
+### ColorMaps.js, ColorMaps.json
+- It doesn't seem this code is ever actually used. While in canonical MIQA it is imported into `main.ts` commenting it out doesn't seem to cause any issues and the import functionality never appears to be utilized.
+- Thus these files have been deleted.
 
 ### viewManager.js
 - Remove conditional in `getView` inside `for` loop as it is never actually called.
