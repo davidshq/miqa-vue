@@ -4,6 +4,7 @@ import SimpleVTKVue from '../views/SimpleVTKView.vue'
 import SimpleITKVue from '../components/SimpleITK.vue'
 import SimpleITKVTKIntegrate from '../components/SimpleITKVTKIntegrate.vue'
 import ITKVTKViewer from '../views/ITKVTKViewer.vue'
+import SimpleMIQAViewer from '../components/SimpleMIQAViewer.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -40,6 +41,11 @@ const router = createRouter({
       path: '/itkvtkviewer',
       name: 'itkvtkviewer',
       component: ITKVTKViewer
+    },
+    {
+      path: '/simplemiqa',
+      name: 'simplemiqa',
+      component: SimpleMIQAViewer
     }
   ]
 })
