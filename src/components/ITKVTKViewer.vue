@@ -6,8 +6,6 @@
       </div>
       <br />
 
-      <textarea readonly name="fileInformation" rows="20" cols="40">File information...</textarea>
-
       <div id="mainContainer" style="min-width:100px;min-height:100px;border:10px;color:white;">
         <div id="view3DContainer"></div>
       </div>
@@ -49,7 +47,7 @@
 
   const displayImage = (vtkImage) => {
     console.group('Running displayImage');
-    // Create proxy manager
+    // Create proxy manager: setupProxyManager
     const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
 
     // Set DOM element
@@ -61,16 +59,9 @@
     view3DProxy
       .getOpenGLRenderWindow();
 
-    // Create source proxy
-    let representation3DProxy;
+    // Create source proxy: setupSourceProxy
     const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
     sourceProxy.setInputData(vtkImage);
-
-    // Create representation proxy for 3D view
-    representation3DProxy = proxyManager.getRepresentation(
-      sourceProxy,
-      view3DProxy
-    );
     view3DProxy.resetCamera();
     console.groupEnd();
   }
