@@ -27,12 +27,10 @@
   const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper;
 
-  const outputFileInformation = curry(function outputFileInformation (
-    outputTextArea,
+  const loadImage = curry(function loadImage (
     event
   ) {
-    console.log('Running outputFileInformation');
-    outputTextArea.textContent = 'Loading...'
+    console.group('Running loadImage');
 
     const dataTransfer = event.dataTransfer
     console.debug('dataTransfer', dataTransfer);
@@ -47,46 +45,42 @@
       // Convert file into a format VTK can understand
       const vtkImage = convertItkToVtkImage(imageOrMesh)
       store.file = vtkImage;
-
-      // Create proxy manager
-      const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
-
-      // Set DOM element
-      const view3DContainer = document.getElementById('view3DContainer');
-
-      // Create view proxy for 3D
-      const view3DProxy = proxyManager.createProxy('Views', 'View3D');
-      view3DProxy.setContainer(view3DContainer);
-      view3DProxy
-        .getOpenGLRenderWindow();
-
-      // Create source proxy
-      let representation3DProxy;
-      const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
-      sourceProxy.setInputData(vtkImage);
-
-      // Create representation proxy for 3D view
-      representation3DProxy = proxyManager.getRepresentation(
-        sourceProxy,
-        view3DProxy
-      );
-      view3DProxy.resetCamera();
-
-
-      function replacer (key, value) {
-        if (!!value && value.byteLength !== undefined) {
-          return String(value.slice(0, 6)) + '...'
-        }
-        return value
-      }
-      outputTextArea.textContent = JSON.stringify(imageOrMesh, replacer, 4)
+      displayImage(vtkImage);
     })
+    console.groupEnd();
   })
+
+  const displayImage = (vtkImage) => {
+    console.group('Running displayImage');
+    // Create proxy manager
+    const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
+
+    // Set DOM element
+    const view3DContainer = document.getElementById('view3DContainer');
+
+    // Create view proxy for 3D
+    const view3DProxy = proxyManager.createProxy('Views', 'View3D');
+    view3DProxy.setContainer(view3DContainer);
+    view3DProxy
+      .getOpenGLRenderWindow();
+
+    // Create source proxy
+    let representation3DProxy;
+    const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
+    sourceProxy.setInputData(vtkImage);
+
+    // Create representation proxy for 3D view
+    representation3DProxy = proxyManager.getRepresentation(
+      sourceProxy,
+      view3DProxy
+    );
+    view3DProxy.resetCamera();
+    console.groupEnd();
+  }
 
   onMounted(() => {
     console.group('Running onMounted');
-    const outputTextArea = document.querySelector('textarea')
-    const handleFile = outputFileInformation(outputTextArea)
+    const handleFile = loadImage()
     const fileInput = document.querySelector('input')
     fileInput.addEventListener('change', handleFile)
     console.groupEnd();
