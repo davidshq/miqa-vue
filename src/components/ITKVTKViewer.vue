@@ -6,7 +6,7 @@
       </div>
       <br />
 
-      <div id="mainContainer" style="min-width:100px;min-height:100px;border:10px;color:white;">
+      <div id="mainContainer">
         <div id="view3DContainer"></div>
       </div>
     </div>
@@ -74,3 +74,12 @@
     console.groupEnd();
   });
   </script>
+
+  <style scoped>
+  .mainContainer
+  {
+    min-width:100px;
+    min-height:100px;
+    border:10px;color:white;
+  }
+  </style>
