@@ -17,7 +17,6 @@
   <script setup>
   import { onMounted } from 'vue';
   import { readFile } from 'itk-wasm';
-  import curry from 'curry';
   import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
   import { useMiqaStore } from '../stores/miqa';
   import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
@@ -27,9 +26,7 @@
   const store = useMiqaStore();
   const { convertItkToVtkImage } = ITKHelper;
 
-  const loadImage = curry(function loadImage (
-    event
-  ) {
+  const loadImage = (event) => {
     console.group('Running loadImage');
 
     const dataTransfer = event.dataTransfer
@@ -48,7 +45,7 @@
       displayImage(vtkImage);
     })
     console.groupEnd();
-  })
+  }
 
   const displayImage = (vtkImage) => {
     console.group('Running displayImage');
