@@ -1,3 +1,4 @@
+/**
 import vtkLookupTableProxy from '@kitware/vtk.js/Proxy/Core/LookupTableProxy';
 import vtkPiecewiseFunctionProxy from '@kitware/vtk.js/Proxy/Core/PiecewiseFunctionProxy';
 import vtkSourceProxy from '@kitware/vtk.js/Proxy/Core/SourceProxy';
@@ -48,7 +49,8 @@ export default {
   },
   filters: {},
 };
-/**import vtk2DView from '@kitware/vtk.js/Proxy/Core/View2DProxy';
+*/
+import vtk2DView from '@kitware/vtk.js/Proxy/Core/View2DProxy';
 import vtkLookupTableProxy from '@kitware/vtk.js/Proxy/Core/LookupTableProxy';
 import vtkPiecewiseFunctionProxy from '@kitware/vtk.js/Proxy/Core/PiecewiseFunctionProxy';
 import vtkProxySource from '@kitware/vtk.js/Proxy/Core/SourceProxy';
@@ -110,16 +112,17 @@ function createDefaultView(classFactory, ui, options, props) {
 export default {
   definitions: {
     Proxy: {
-      LookupTable: createProxyDefinition(vtkLookupTableProxy, [], [], {
+      /*LookupTable: createProxyDefinition(vtkLookupTableProxy, [], [], {
         presetName: 'Default (Cool to Warm)',
-      }),
+      }),*/
+      LookupTable: { class: vtkLookupTableProxy },
       // Controls the appearance of the volume.
       PiecewiseFunction: createProxyDefinition(vtkPiecewiseFunctionProxy),
     },
     Sources: {
       // For stand-alone data objects
       TrivialProducer: activateOnCreate(createProxyDefinition(vtkProxySource)),
-      Contour: proxyFilter.Contour,
+      /*Contour: proxyFilter.Contour,*/
     },
     Representations: {
       Geometry: createProxyDefinition(
@@ -201,4 +204,4 @@ export default {
   filters: {
     vtkImageData: ['Contour'],
   },
-};*/
+};
