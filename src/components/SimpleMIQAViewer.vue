@@ -7,7 +7,7 @@
       <br />
 
       <div id="mainContainer">
-        <div id="view3DContainer"></div>
+        <div id="view3DContainer" style="display:flex; position: relative;"></div>
       </div>
     </div>
   </template>
