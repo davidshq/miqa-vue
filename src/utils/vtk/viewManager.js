@@ -8,7 +8,7 @@ import { VIEW_ORIENTATIONS } from './constants';
  * @returns {null}
  */
 function getView(proxyManager, viewType) {
-  console.log('getView: Running');
+  console.group('getView: Running');
   const [type, name] = viewType.split(':');
   let view = null;
   const views = proxyManager.getViews();
@@ -19,6 +19,7 @@ function getView(proxyManager, viewType) {
   if (!view) {
     // Get a new proxy of Views
     view = proxyManager.createProxy('Views', type, { name });
+    console.debug(view);
 
     // Make sure representation is created for new view
     proxyManager
@@ -30,6 +31,7 @@ function getView(proxyManager, viewType) {
     //   Camera initialization when the view is rendered will override this
     //   with the project's preferred orientation
     const { axis, directionOfProjection, viewUp } = VIEW_ORIENTATIONS.LPS[name];
+    console.log('view', view);
     view.updateOrientation(axis, directionOfProjection, viewUp);
 
     // set background to transparent
@@ -39,6 +41,7 @@ function getView(proxyManager, viewType) {
     view.setPresetToOrientationAxes('default');
   }
 
+  console.groupEnd();
   return view;
 }
 
