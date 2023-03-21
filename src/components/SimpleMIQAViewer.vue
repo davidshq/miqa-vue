@@ -41,27 +41,31 @@
       const vtkImage = convertItkToVtkImage(imageOrMesh)
       store.file = vtkImage;
 
-      // Create proxy manager
-      const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
+      displayImage(vtkImage);
+  }
 
-      // Set DOM element
-      const view3DContainer = document.getElementById('view3DContainer');
+  const displayImage = (vtkImage) => {
+    // Create proxy manager
+    const proxyManager = vtkProxyManager.newInstance({ proxyConfiguration });
 
-      // Create view proxy for 3D
-      const view3DProxy = proxyManager.createProxy('Views', 'View3D');
-      view3DProxy.setContainer(view3DContainer);
-      view3DProxy.getOpenGLRenderWindow();
+    // Set DOM element
+    const view3DContainer = document.getElementById('view3DContainer');
 
-      // Create source proxy
-      let representation3DProxy;
-      const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
-      sourceProxy.setInputData(vtkImage);
+    // Create view proxy for 3D
+    const view3DProxy = proxyManager.createProxy('Views', 'View3D');
+    view3DProxy.setContainer(view3DContainer);
+    view3DProxy.getOpenGLRenderWindow();
 
-      // Create representation proxy for 3D view
-      representation3DProxy = proxyManager.getRepresentation(
-          sourceProxy,
-          view3DProxy
-      );
-      view3DProxy.resetCamera();
+    // Create source proxy
+    let representation3DProxy;
+    const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
+    sourceProxy.setInputData(vtkImage);
+
+    // Create representation proxy for 3D view
+    representation3DProxy = proxyManager.getRepresentation(
+        sourceProxy,
+        view3DProxy
+    );
+    view3DProxy.resetCamera();
   }
   </script>
