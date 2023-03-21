@@ -38,14 +38,13 @@ export const useMiqaStore = defineStore('miqaStore', () => {
         const imageOrMesh = image || mesh
     
         // Convert file into a format VTK can understand
-        const vtkImage = convertItkToVtkImage(imageOrMesh)
-        file.value = vtkImage;
+        file.value = convertItkToVtkImage(imageOrMesh)
     
-        displayImage(vtkImage);
+        displayImage();
         console.groupEnd();
     }
     
-    const displayImage = (vtkImage) => {
+    const displayImage = () => {
         console.group('Running displayImage');
       // Create proxy manager
       const proxyManager = setupProxyManager();
@@ -64,7 +63,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       // Create source proxy
       let representation3DProxy;
       const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
-      sourceProxy.setInputData(vtkImage);
+      sourceProxy.setInputData(file.value);
     
       // Create representation proxy for 3D view
       representation3DProxy = proxyManager.getRepresentation(
