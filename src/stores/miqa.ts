@@ -84,12 +84,12 @@ export const useMiqaStore = defineStore('miqaStore', () => {
         return proxyManager;
     }
 
-    const prepareProxyManager = async (proxyManager) => {
+    const prepareProxyManager = (proxyManager) => {
         console.group('Running prepareProxyManager');
         console.debug('proxyManager', proxyManager);
-        const view = await getView(proxyManager, 'View2D_Z:z');
-        console.debug(await view);
-        view.setOrientationAxesVisibility(false)
+        const view = getView(proxyManager, 'View2D_Z:z');
+        console.debug('view', view);
+        view.setOrientationAxesVisibility(false);
         view.getRepresentations().forEach((representation) => {
             representation.setInterpolationType(InterpolationType.NEAREST);
             representation.onModified(macro.debounce(() => {
@@ -98,6 +98,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
                 }
             }, 0));
         });
+        console.debug('Completed prepareProxyManager');
         console.groupEnd();
     }
 
