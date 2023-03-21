@@ -3,10 +3,9 @@
         <div id="view3DContainer"></div>
       </div>
 </template>
-  
+
 <script setup>
   import { onMounted } from 'vue';
-  import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
   import { useMiqaStore } from '../stores/miqa';
   import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
   import '@kitware/vtk.js/Rendering/Profiles/Volume';
@@ -24,20 +23,14 @@
     view3DProxy.setContainer(view3DContainer);
     view3DProxy
       .getOpenGLRenderWindow();
-  
-  // Create source eproxy
-  let representation3DProxy;
-      const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
-      sourceProxy.setInputData(store.vtkImage);
 
-  // Create representation proxy for 3D view
-  representation3DProxy = proxyManager.getRepresentation(
-        sourceProxy,
-        view3DProxy
-      );
+  // Create source proxy
+  const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
+  sourceProxy.setInputData(store.vtkImage);
+
   view3DProxy.resetCamera();
 
-  
+
   onMounted(() => {
     console.group('Running onMounted');
     console.groupEnd();
