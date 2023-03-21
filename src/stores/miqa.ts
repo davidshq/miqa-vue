@@ -102,6 +102,23 @@ export const useMiqaStore = defineStore('miqaStore', () => {
         console.groupEnd();
     }
 
+    async function setupSourceProxy(proxyManager) {
+        console.group('setupSourceProxy: Running');
+        console.debug('proxyManager', proxyManager);
+        const sourceProxy = proxyManager.createProxy(
+                'Sources',
+                'TrivialProducer'
+        );
+        console.debug('sourceProxy', sourceProxy);
+    
+        console.debug('state.file', file);
+        sourceProxy.setInputData(file);
+        
+        vtkViews.value = await proxyManager.getViews();
+        console.debug('state.vtkViews[0]', vtkViews.value[0]);
+        console.groupEnd();
+    }
+
     return {
         file,
         proxyManager,
@@ -110,6 +127,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
         loadImage,
         displayImage,
         setupProxyManager,
-        prepareProxyManager
+        prepareProxyManager,
+        setupSourceProxy,
     };
 });

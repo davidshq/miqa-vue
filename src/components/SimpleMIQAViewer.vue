@@ -1,21 +1,21 @@
 <template>
+  <div>
     <div>
-      <div>
-        <label>Select image or mesh:</label><br />
-        <input name="inputFile" type="file" @change="$event => loadImage($event)" />
-      </div>
-      <br />
-
-      <div id="mainContainer">
-        <div id="view3DContainer"></div>
-      </div>
+      <label>Select image or mesh:</label><br />
+      <input name="inputFile" type="file" @change="$event => loadImage($event)" />
     </div>
-  </template>
+    <br />
 
-  <script setup>
+    <div id="mainContainer">
+      <div id="view3DContainer"></div>
+    </div>
+  </div>
+</template>
+
+<script setup>
   import { useMiqaStore } from '@/stores/miqa';
   const { loadImage } = useMiqaStore();
-  </script>
+</script>
 
 <style scoped>
 .mainContainer {
