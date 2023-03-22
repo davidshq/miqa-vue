@@ -80,25 +80,28 @@ export const useMiqaStore = defineStore('miqaStore', () => {
             proxyConfiguration: proxyConfiguration,
         });
         console.groupEnd();
+        // Do we need to return?
         return proxyManager;
     }
 
     const prepareProxyManager = (proxyManager) => {
         console.group('Running prepareProxyManager');
         console.debug('proxyManager', proxyManager);
-        const view = getView(proxyManager, 'View2D_Z:z');
-        console.debug('view', view);
-        view.setOrientationAxesVisibility(false);
-        view.getRepresentations().forEach((representation) => {
-            representation.setInterpolationType(InterpolationType.NEAREST);
-            representation.onModified(macro.debounce(() => {
-                if (view.getRepresentations()) {
-                    view.render(true);
-                }
-            }, 0));
+        ['View2D_Z:z', 'View2D_X:x', 'View2D_Y:y'].forEach((type) => {
+            const view = getView(proxyManager, type);
+            console.debug('view', view);
+            view.setOrientationAxesVisibility(false);
+            view.getRepresentations().forEach((representation) => {
+                representation.setInterpolationType(InterpolationType.NEAREST);
+                representation.onModified(macro.debounce(() => {
+                    if (view.getRepresentations()) {
+                        view.render(true);
+                    }
+                }, 0));
+            });
+            console.debug('Completed prepareProxyManager');
+            console.groupEnd();
         });
-        console.debug('Completed prepareProxyManager');
-        console.groupEnd();
     }
 
     async function setupSourceProxy(proxyManager) {
