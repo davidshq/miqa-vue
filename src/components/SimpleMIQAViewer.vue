@@ -2,11 +2,11 @@
   <div>
     <div>
       <label>Select image or mesh:</label><br />
-      <input name="inputFile" type="file" @change="$event => loadImage($event)" />
+      <input name="inputFile" type="file" @change="loadImage($event)" />
     </div>
     <br />
 
-    <div id="mainContainer">
+    <div class="mainContainer">
       <div id="view3DContainer"></div>
     </div>
   </div>
@@ -26,7 +26,7 @@
   border:10px;
   color:white;
 }
-.view3DContainer {
+#view3DContainer {
   display: flex;
   position: relative;
 }
