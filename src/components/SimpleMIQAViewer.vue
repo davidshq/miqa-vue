@@ -23,7 +23,8 @@
   min-height:100px;
   max-width:1000px;
   max-height:1000px;
-  border:10px;color:white;
+  border:10px;
+  color:white;
 }
 .view3DContainer {
   display: flex;
