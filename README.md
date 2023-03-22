@@ -107,6 +107,13 @@ I'm attempting to implement one feature at a time so you can look at various bra
 - `add-nii-gz` - Adds a basic implementation of ITK within the Vue app.
 - `load-image` - Wired a modified version of the VTK.js ProxyManager example up to the ITK loader/VTK converter, now renders an image.
 - `add-pinia` - Refactors project to make use of Pinia, basic implementation.
+- `miqa-vtk` - This ended up being Part 1 as the challenges were more significant than expected.
+  - Important: This was the last branch that includes earlier in-process components. If you are looking for simple integrations this is the last branch in which they exist.
+  - Renamed files from `.js` to `.ts`
+  - Removed some aspects of default Vue project.
+  - Added `SimpleMIQAViewer.vue` component.
+  - Moved significant portions of code utilizing VTK.js/ITK-wasm into the Pinia store.
+  - Removed ColorMaps files, they weren't utilized.
 
 ## Resources & Notes
 - The README varies based on the branch one is currently on. Please see the Learning Branches section to learn more about the various branches and what they cover.

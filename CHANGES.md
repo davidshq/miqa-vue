@@ -1,5 +1,8 @@
 # Changes from MIQA Canonical
 
+## All
+All `.js` files have been renamed to `.ts`.
+
 ## Folders
 - The `vtk` folder is now a sub-folder of `utils`.
 
