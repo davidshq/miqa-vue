@@ -25,46 +25,46 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     // @ts-ignore
     async function loadImage (event) {
         console.group('Running loadImage');
-    
+
         const dataTransfer = event.dataTransfer;
         console.debug('dataTransfer', dataTransfer);
         const files = event.target.files || dataTransfer.files
-    
+
         // Use ITK to read the file
         const loadedFile = await readFile(null, files[0]);
         const { image, mesh, webWorker } = loadedFile;
-    
+
         webWorker.terminate()
         const imageOrMesh = image || mesh
-    
+
         // Convert file into a format VTK can understand
         file.value = convertItkToVtkImage(imageOrMesh)
-    
+
         displayImage();
         console.groupEnd();
     }
-    
+
     const displayImage = () => {
         console.group('Running displayImage');
       // Create proxy manager
       const proxyManager = setupProxyManager();
       console.debug('proxyManager', proxyManager);
-      
+
       prepareProxyManager(proxyManager);
-    
+
       // Set DOM element
       const view3DContainer = document.getElementById('view3DContainer');
-    
+
       // Create view proxy for 3D
       const view3DProxy = proxyManager.createProxy('Views', 'View3D');
       view3DProxy.setContainer(view3DContainer);
       view3DProxy.getOpenGLRenderWindow();
-    
+
       // Create source proxy
       let representation3DProxy;
       const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
       sourceProxy.setInputData(file.value);
-    
+
       // Create representation proxy for 3D view
       representation3DProxy = proxyManager.getRepresentation(
           sourceProxy,
@@ -109,10 +109,10 @@ export const useMiqaStore = defineStore('miqaStore', () => {
                 'TrivialProducer'
         );
         console.debug('sourceProxy', sourceProxy);
-    
+
         console.debug('state.file', file);
         sourceProxy.setInputData(file);
-        
+
         vtkViews.value = await proxyManager.getViews();
         console.debug('state.vtkViews[0]', vtkViews.value[0]);
         console.groupEnd();

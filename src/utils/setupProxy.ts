@@ -3,7 +3,7 @@ import macro from '@kitware/vtk.js/macros';
 import { InterpolationType } from '@kitware/vtk.js/Rendering/Core/ImageProperty/Constants';
 
 import proxyConfig from './vtk/proxy';
-import { getView } from './vtk/viewManager';
+import { getView } from './vtk/viewManager.js';
 
 export async function setupProxyManager( state ) {
     console.group('setupProxyManager: Running');
@@ -25,7 +25,7 @@ export async function setupSourceProxy( state ) {
 
     console.debug('state.file', state.file);
     sourceProxy.setInputData(state.file);
-    
+
     state.vtkViews = await state.proxyManager.getViews();
     console.debug('state.vtkViews', state.vtkViews);
     console.debug('state.vtkViews[0]', state.vtkViews[0]);
