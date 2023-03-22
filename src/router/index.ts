@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import SimpleMIQAViewer from '../components/SimpleMIQAViewer.vue'
+import Scan from '../views/ScanView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,9 +11,9 @@ const router = createRouter({
       component: HomeView
     },
     {
-      path: '/simplemiqa',
-      name: 'simplemiqa',
-      component: SimpleMIQAViewer
+      path: '/scan',
+      name: 'scan',
+      component: Scan
     }
   ]
 })

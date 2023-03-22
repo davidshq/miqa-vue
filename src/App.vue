@@ -11,7 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
         <RouterLink to="/simplevtk">SimpleVTK</RouterLink>
         <RouterLink to="/simpleitkvtk">SimpleITKVTK</RouterLink>
         <RouterLink to="/itkvtkviewer">ITKVTKViewer</RouterLink>
-        <RouterLink to="/simplemiqa">SimpleMIQAViewer</RouterLink>
+        <RouterLink to="/scan">Scan</RouterLink>
       </nav>
     </div>
   </header>
