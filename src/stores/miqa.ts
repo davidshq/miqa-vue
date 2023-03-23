@@ -53,7 +53,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       prepareProxyManager(proxyManager);
 
       // Set DOM element
-      const view3DContainer = document.getElementById('view3DContainer');
+      const view3DContainer = document.getElementById('viewer');
 
       // Create view proxy for 3D
       const view3DProxy = proxyManager.createProxy('Views', 'View3D');

@@ -6,8 +6,8 @@
     </div>
     <br />
 
-    <div class="mainContainer">
-      <div id="view3DContainer"></div>
+    <div class="vtk-viewer">
+      <div id="viewer"></div>
     </div>
   </div>
 </template>
@@ -18,7 +18,7 @@
 </script>
 
 <style scoped>
-.mainContainer {
+.vtk-viewer {
   min-width:100px;
   min-height:100px;
   max-width:1000px;
@@ -26,7 +26,7 @@
   border:10px;
   color:white;
 }
-#view3DContainer {
+#viewer {
   display: flex;
   position: relative;
 }
