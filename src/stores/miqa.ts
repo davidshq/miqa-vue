@@ -56,9 +56,9 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       const viewer = document.getElementById('viewer');
 
       // Create view proxy for 3D
-      const view3DProxy = proxyManager.createProxy('Views', 'View3D');
-      view3DProxy.setContainer(viewer);
-      view3DProxy.getOpenGLRenderWindow();
+      const view = proxyManager.createProxy('Views', 'View3D');
+      view.setContainer(viewer);
+      view.getOpenGLRenderWindow();
 
       // Create source proxy
       const sourceProxy = proxyManager.createProxy('Sources', 'TrivialProducer');
@@ -67,9 +67,9 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       // Create representation proxy for 3D view
       const representation = proxyManager.getRepresentation(
           sourceProxy,
-          view3DProxy
+          view
       );
-      view3DProxy.resetCamera();
+      view.resetCamera();
       console.groupEnd();
     }
 
