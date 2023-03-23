@@ -60,17 +60,17 @@ function createDefaultView(classFactory, ui?, options?, props?) {
 export default {
   definitions: {
     Proxy: {
-      /*LookupTable: createProxyDefinition(vtkLookupTableProxy, [], [], {
+      LookupTable: createProxyDefinition(vtkLookupTableProxy, [], [], {
         presetName: 'Default (Cool to Warm)',
-      }),*/
-      LookupTable: { class: vtkLookupTableProxy },
+      }),
+      // LookupTable: { class: vtkLookupTableProxy },
       // Controls the appearance of the volume.
       PiecewiseFunction: createProxyDefinition(vtkPiecewiseFunctionProxy),
     },
     Sources: {
       // For stand-alone data objects
       TrivialProducer: activateOnCreate(createProxyDefinition(vtkProxySource)),
-      /*Contour: proxyFilter.Contour,*/
+      Contour: proxyFilter.Contour,
     },
     Representations: {
       Geometry: createProxyDefinition(
