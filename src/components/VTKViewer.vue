@@ -8,6 +8,10 @@
 
     <div class="vtk-viewer">
       <div id="viewer"></div>
+      <canvas id="crosshairs-x"
+           ref="crosshairCanvas"
+           class="crosshairs"
+           ></canvas>
     </div>
   </div>
 </template>
@@ -25,9 +29,23 @@
   max-height:1000px;
   border:10px;
   color:white;
+  z-index: 0;
 }
 #viewer {
   display: flex;
   position: relative;
+}
+
+#viewer > div {
+  cursor: crosshair !important;
+}
+
+.crosshairs {
+  z-index: 3;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 </style>
