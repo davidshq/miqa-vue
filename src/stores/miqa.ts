@@ -14,9 +14,9 @@ const { convertItkToVtkImage } = ITKHelper;
 export const useMiqaStore = defineStore('miqaStore', () => {
   const file = ref(null);
   const proxyManager = ref(null);
-  const vtkViews = ref([]);
   const slice = ref(null);
   const sourceProxy = ref(null);
+  const vtkViews = ref([]);
   const VIEW_ORIENTATIONS = {
     default: {
     axis: 1,
@@ -70,8 +70,8 @@ export const useMiqaStore = defineStore('miqaStore', () => {
   const displayImage = () => {
     console.group('Running displayImage');
 
-    setupProxyManager();
-    setupSourceProxy();
+    setupProxyManager(proxyManager, vtkViews);
+    setupSourceProxy(proxyManager, vtkViews);
 
     // Create view proxy
     const view = vtkViews.value[0];
@@ -80,13 +80,13 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     const representation = getRepresentation(proxyManager, view);
 
     initializeView(view);
-    initializeSlice(representation);
+    initializeSlice(representation, slice);
     initializeCamera(view, representation);
 
     console.groupEnd();
   }
 
-  const setupProxyManager = () => {
+  const setupProxyManager = (proxyManager, vtkViews) => {
     console.group('Running setupProxyManager');
     proxyManager.value = vtkProxyManager.newInstance({
         proxyConfiguration
@@ -96,7 +96,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     console.groupEnd();
   }
 
-  const prepareProxyManager = () => {
+  const prepareProxyManager = (proxyManager) => {
     console.group('Running prepareProxyManager');
     if (!proxyManager.value.getViews().length) {
       ['View2D_Z:z', 'View2D_X:x', 'View2D_Y:y'].forEach((type) => {
@@ -115,11 +115,11 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     console.groupEnd();
   }
 
-  const setupSourceProxy = () => {
+  const setupSourceProxy = (proxyManager, vtkViews) => {
     console.group('Running setupSourceProxy');
     sourceProxy.value = proxyManager.value.createProxy('Sources', 'TrivialProducer');
     sourceProxy.value.setInputData(file.value);
-    prepareProxyManager();
+    prepareProxyManager(proxyManager);
     vtkViews.value = proxyManager.value.getViews();
     console.groupEnd()
   }
@@ -139,7 +139,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
         proxyManager.value.getRepresentation(source, view)
       });
       const { axis, directionOfProjection, viewUp } = VIEW_ORIENTATIONS;
-      view.updateOrientation(axis, directionOfProjection, viewUp);
+      view.updateOrientation(axis, directionOfProjection, viewUp, 0);
       view.setBackground(0, 0, 0, 0);
       view.setPresetToOrientationAxes('default');
     }
@@ -170,7 +170,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     return view;
   }
 
-  const initializeSlice = (representation) => {
+  const initializeSlice = (representation, slice) => {
     console.group('Running initializeSlice');
     slice.value = representation.getSlice();
     console.groupEnd();
