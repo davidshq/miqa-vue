@@ -69,33 +69,18 @@ export const useMiqaStore = defineStore('miqaStore', () => {
 
   const displayImage = () => {
     console.group('Running displayImage');
-    // Create proxy manager
+
     setupProxyManager();
-
-    // Create view proxy
-    const view = proxyManager.value.createProxy('Views', 'View2D');
-    view.getOpenGLRenderWindow();
-
-    // Create source proxy
     setupSourceProxy();
 
+    // Create view proxy
+    const view = vtkViews.value[0];
+    // view.getOpenGLRenderWindow();
 
-    // Begin VtkViewer
-    // Create representation proxy
-    const representation = proxyManager.value.getRepresentation(
-      null,
-      view
-    );
-    console.log('representation', representation);
-    // Set DOM element
-    const viewer = document.getElementById('viewer');
-    // initializeView
-    view.setContainer(viewer);
-    fill2DView(view);
-    // initializeSlice
-    slice.value = representation.getSlice();
+    const representation = getRepresentation(proxyManager, view);
 
-    // initializeCamera
+    initializeView(view);
+    initializeSlice(representation);
     initializeCamera(view, representation);
 
     console.groupEnd();
@@ -106,6 +91,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     proxyManager.value = vtkProxyManager.newInstance({
         proxyConfiguration
    });
+    vtkViews.value = [];
     console.debug('proxyManager', proxyManager);
     console.groupEnd();
   }
@@ -139,6 +125,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
   }
 
   const getView = (proxyManager, viewType) => {
+    console.group('Running getView');
     const [type, name] = viewType.split(':');
     let view = null;
     const views = proxyManager.value.getViews();
@@ -148,19 +135,24 @@ export const useMiqaStore = defineStore('miqaStore', () => {
 
     if (!view) {
       view = proxyManager.value.createProxy('Views', type, { name });
-      proxyManager.value.getSources().forEach((source) => proxyManager.getRepresentation(source, view));
+      proxyManager.value.getSources().forEach((source) => {
+        proxyManager.value.getRepresentation(source, view)
+      });
       const { axis, directionOfProjection, viewUp } = VIEW_ORIENTATIONS;
       view.updateOrientation(axis, directionOfProjection, viewUp);
       view.setBackground(0, 0, 0, 0);
       view.setPresetToOrientationAxes('default');
     }
+    console.groupEnd();
+    return view;
   }
 
   const initializeCamera = (view, representation) => {
+    console.group('Running initializeCamera');
     const camera = view.getCamera();
     const orientation = representation.getInputDataSet().getDirection();
     console.log('orientation', orientation);
-    const name = 'x';
+    const name = view.getName(); // x, y, z
     console.log('name', name);
     console.log(VIEW_ORIENTATIONS);
     console.log(VIEW_ORIENTATIONS[name].viewUp);
@@ -174,10 +166,38 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     camera.setViewUp(...newViewUp);
     view.resetCamera();
     fill2DView(view);
+    console.groupEnd();
     return view;
   }
 
+  const initializeSlice = (representation) => {
+    console.group('Running initializeSlice');
+    slice.value = representation.getSlice();
+    console.groupEnd();
+  }
+
+  const initializeView = (view) => {
+    console.group('Running initializeView');
+    // Set DOM element
+    const viewer = document.getElementById('viewer');
+    view.setContainer(viewer);
+    fill2DView(view);
+    console.groupEnd();
+  }
+
+  const getRepresentation = (proxyManager, view) => {
+    console.group('Running getRepresentation');
+    const representation = proxyManager.value.getRepresentation(
+        null,
+        view
+    );
+    console.debug('representation', representation);
+    console.groupEnd();
+    return representation;
+  }
+
   const findClosestColumnToVector = (inputVector, matrix) => {
+    console.group('Running findClosestColumnToVector');
     let currClosest = null;
     let currMax = 0;
     const inputVectorAxis = inputVector.findIndex((value) => value !== 0);
@@ -196,11 +216,12 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       if (flipCurrClosest < 0) {
         currClosest = currClosest.map((value) => value * -1);
       }
+      console.groupEnd();
       return currClosest;
     }
 
   const fill2DView = (view, w?, h?, resize = true) => {
-    console.log('fill2DView.js - fill2DView: Running');
+    console.group('fill2DView: Running');
     if (!view) return undefined;
     if (resize) view.resize();
     const viewName = view.getName();
@@ -212,7 +233,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       (bounds[3] - bounds[2]) / 2,
       (bounds[5] - bounds[4]) / 2,
     ];
-    console.debug('fill2DView - dim', dim);
+    console.debug('dim', dim);
     w = w || view.getContainer().clientWidth;
     h = h || view.getContainer().clientHeight;
     const r = w / h;
@@ -236,7 +257,8 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       view.resize();
       view.getCamera().setParallelScale(scale);
     }
-      return scale;
+    console.groupEnd();
+    return scale;
   }
 
   return {
