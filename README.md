@@ -30,13 +30,14 @@ Currently:
 2. A slightly modified version of the code found in the [official VTK/Vue tutorial](https://kitware.github.io/vtk-js/docs/vtk_vue.html) has been implemented.
 3. A slightly modified version of the [Vite ITK-wasm example](https://github.com/InsightSoftwareConsortium/itk-wasm/tree/main/examples/vite) has been implemented in Vue.
 4. A modified version of the [VTK.js Proxy Manager example](https://kitware.github.io/vtk-js/examples/ProxyManager.html) is now wired up to display the images that are loaded by ITK-wasm and converted by VTK.js.
+5. Significant changes to the code have been made to bring it closer to the main MIQA project and instead of a 3D image now a 2D slice is displayed.
 
-This means the basic code/setup for Vue/ITK is operational.
+This means the basic code/setup for Vue/ITK is operational and is converging with the core MIQA code in many ways.
 
 ## Next Steps
-The `miqa-vtk` branch was created to integrate the VTK code in the existing MIQA codebase into the new Vue 3.x codebase. This will be core rendering, not additional features like crosshairs.
+Taking a slight detour for the upcoming branch `miqa-refactor` which will focus on cleaning up some of the code and looking for differences between this code and the core code that should be converged.
 
-If this is completed successfully then I should be able to move on to implementing crosshairs.
+Once this step is complete we'll return to our "regularly scheduled programming" with an upcoming `miqa-crosshairs` branch which will work on implementing the crosshairs functionality.
 
 ## Customize configuration
 
@@ -109,11 +110,13 @@ I'm attempting to implement one feature at a time so you can look at various bra
 - `add-pinia` - Refactors project to make use of Pinia, basic implementation.
 - `miqa-vtk` - This ended up being Part 1 as the challenges were more significant than expected.
   - Important: This was the last branch that includes earlier in-process components. If you are looking for simple integrations this is the last branch in which they exist.
+  - Important: This was the last branch to provide a 3D visualization, this branch now includes a slice view. If you are looking for 3D visualization the previous branch above.
   - Renamed files from `.js` to `.ts`
   - Removed some aspects of default Vue project.
   - Added `SimpleMIQAViewer.vue` component.
   - Moved significant portions of code utilizing VTK.js/ITK-wasm into the Pinia store.
   - Removed ColorMaps files, they weren't utilized.
+- `miqa-vtk-2` - Changes from 3D visualization to 2D slice visualization, work towards converging code with MIQA core.
 
 ## Resources & Notes
 - The README varies based on the branch one is currently on. Please see the Learning Branches section to learn more about the various branches and what they cover.
