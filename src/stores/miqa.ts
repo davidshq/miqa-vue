@@ -5,7 +5,6 @@ import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
 import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
 import proxyConfiguration from '../utils/vtk/proxy';
 import macro from '@kitware/vtk.js/macros';
-import { getView } from '../utils/vtk/viewManager';
 import { InterpolationType } from '@kitware/vtk.js/Rendering/Core/ImageProperty/Constants';
 import '@kitware/vtk.js/Rendering/Profiles/Volume';
 import { vec3 } from 'gl-matrix';
@@ -91,28 +90,14 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     // Set DOM element
     const viewer = document.getElementById('viewer');
     // initializeView
-     view.setContainer(viewer);
+    view.setContainer(viewer);
     fill2DView(view);
     // initializeSlice
     slice.value = representation.getSlice();
+
     // initializeCamera
-    const camera = view.getCamera();
-    const orientation = representation.getInputDataSet().getDirection();
-    console.log('orientation', orientation);
-    const name = 'x';
-    console.log('name', name);
-    console.log(VIEW_ORIENTATIONS);
-    console.log(VIEW_ORIENTATIONS[name].viewUp);
-    let newViewUp = VIEW_ORIENTATIONS[name].viewUp.slice()
-    console.log('newViewUp', newViewUp);
-    let newDirectionOfProjection = VIEW_ORIENTATIONS[name].directionOfProjection;
-    console.log('newDirectionOfProjection', newDirectionOfProjection);
-    newViewUp = findClosestColumnToVector(newViewUp, orientation);
-    newDirectionOfProjection = findClosestColumnToVector(newDirectionOfProjection, orientation);
-    camera.setDirectionOfProjection(...newDirectionOfProjection);
-    camera.setViewUp(...newViewUp);
-    view.resetCamera();
-    fill2DView(view);
+    initializeCamera(view, representation);
+
     console.groupEnd();
   }
 
@@ -169,6 +154,27 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       view.setBackground(0, 0, 0, 0);
       view.setPresetToOrientationAxes('default');
     }
+  }
+
+  const initializeCamera = (view, representation) => {
+    const camera = view.getCamera();
+    const orientation = representation.getInputDataSet().getDirection();
+    console.log('orientation', orientation);
+    const name = 'x';
+    console.log('name', name);
+    console.log(VIEW_ORIENTATIONS);
+    console.log(VIEW_ORIENTATIONS[name].viewUp);
+    let newViewUp = VIEW_ORIENTATIONS[name].viewUp.slice()
+    console.log('newViewUp', newViewUp);
+    let newDirectionOfProjection = VIEW_ORIENTATIONS[name].directionOfProjection;
+    console.log('newDirectionOfProjection', newDirectionOfProjection);
+    newViewUp = findClosestColumnToVector(newViewUp, orientation);
+    newDirectionOfProjection = findClosestColumnToVector(newDirectionOfProjection, orientation);
+    camera.setDirectionOfProjection(...newDirectionOfProjection);
+    camera.setViewUp(...newViewUp);
+    view.resetCamera();
+    fill2DView(view);
+    return view;
   }
 
   const findClosestColumnToVector = (inputVector, matrix) => {
