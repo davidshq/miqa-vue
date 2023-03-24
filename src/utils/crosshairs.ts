@@ -1,4 +1,4 @@
-import vtkCellPicker from 'vtk.js/Sources/Rendering/Core/CellPicker';
+import vtkCellPicker from '@kitware/vtk.js/Rendering/Core/CellPicker';
 
 class CrosshairSet {
     xyzName: string;
@@ -24,24 +24,26 @@ class CrosshairSet {
         jSlice,
         kSlice,
     ) {
-        console.group('Crosshairs.js - CrosshairSet - constructor: Running');
+        console.group('CrosshairSet - constructor: Running');
         this.xyzName = xyzName;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: xyzName: ', xyzName);
+        console.debug('xyzName: ', xyzName);
         this.ijkName = ijkName;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: ijkName: ', ijkName);
+        console.debug('ijkName: ', ijkName);
         this.imageRepresentation = imageRepresentation;
+        console.debug('imageRepresentation: ', imageRepresentation);
         this.imageData = this.imageRepresentation.getInputDataSet();
         this.imageView = imageView;
+        console.log('imageView', imageView);
         this.renderer = this.imageView.getRenderer();
-        this.renderWindow = this.imageView.getOpenglRenderWindow();
+        this.renderWindow = this.imageView.getOpenGLRenderWindow();
         this.imageCanvas = imageCanvas;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: imageCanvas: ', imageCanvas);
+        console.debug('imageCanvas: ', imageCanvas);
         this.iSlice = iSlice;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: iSlice: ', iSlice);
+        console.debug('iSlice: ', iSlice);
         this.jSlice = jSlice;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: jSlice: ', jSlice);
+        console.debug('jSlice: ', jSlice);
         this.kSlice = kSlice;
-        console.debug('Crosshairs.js - CrosshairSet - constructor: kSlice: ', kSlice);
+        console.debug('kSlice: ', kSlice);
         this.ijkMapping = {
             x: 'i',
             y: 'j',
@@ -51,13 +53,13 @@ class CrosshairSet {
     }
 
     getOrientation() {
-        console.log('crosshairs.js - getOrientation: Running');
+        console.log('crosshairSet - getOrientation: Running');
         if (!this.imageRepresentation.getInputDataSet()) return undefined;
         return this.imageRepresentation.getInputDataSet().getDirection();
     }
 
     getSliceLines() {
-        console.group('crosshairs.js - getSliceLines: Running');
+        console.group('crosshairSet - getSliceLines: Running');
         if (!this.imageData) return undefined;
         const [iMax, jMax, kMax] = this.imageData.getDimensions();
         console.debug('iMax, jMax, kMax', iMax, jMax, kMax);
@@ -108,7 +110,7 @@ class CrosshairSet {
 
     // Used in VtkViewer
     getCrosshairsForAxis(axis, colors) {
-        console.log('crosshairs.js - getCrosshairsForAxis: Running');
+        console.log('crosshairSet - getCrosshairsForAxis: Running');
         const sliceLines = this.getSliceLines();
         let horizontalLine = null;
         let verticalLine = null;
@@ -127,7 +129,7 @@ class CrosshairSet {
     }
 
     trueAxis(axisName) {
-        console.log('crosshairs.js - trueAxis: Running');
+        console.log('crosshairSet - trueAxis: Running');
         const xyzAxisOrdering = ['x', 'y', 'z'];
         const ijkAxisOrdering = ['i', 'j', 'k'];
         let axisOrdering = xyzAxisOrdering;
@@ -151,7 +153,7 @@ class CrosshairSet {
     }
 
     getPicker() {
-        console.log('crosshairs.js - getPicker: Running');
+        console.log('crosshairSet - getPicker: Running');
         const picker = vtkCellPicker.newInstance();
         picker.setPickFromList(1);
         picker.setTolerance(0);
@@ -162,14 +164,14 @@ class CrosshairSet {
 
     // Used in VtkViewer
     locationOfClick(clickEvent) {
-        console.log('crosshairs.js - locationOfClick: Running');
+        console.log('crosshairSet - locationOfClick: Running');
         const picker = this.getPicker();
         picker.pick([clickEvent.position.x, clickEvent.position.y, 0], this.renderer);
         if (picker.getActors().length === 0) return { i: undefined, j: undefined, k: undefined };
 
         const [xyzLocation] = picker.getPickedPositions();
         const indexLocation = this.imageData.worldToIndex(xyzLocation);
-        const halfDims = this.imageData.getDimensions().map((dim) => dim / 2);
+        const halfDims = this.imageData.getDimensions().map((dim: number) => dim / 2);
 
         const worldCoords = Object.fromEntries(Object.entries({
             i: [indexLocation[0], halfDims[1], halfDims[2]],
