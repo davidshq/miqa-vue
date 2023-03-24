@@ -10,16 +10,31 @@ import { InterpolationType } from '@kitware/vtk.js/Rendering/Core/ImageProperty/
 import '@kitware/vtk.js/Rendering/Profiles/Volume';
 import { vec3 } from 'gl-matrix';
 import type vtkView from '@kitware/vtk.js/Proxy/Core/ViewProxy';
+import CrosshairSet from '../utils/crosshairs';
+import type vtkSourceProxy from "@kitware/vtk.js/Proxy/Core/SourceProxy";
 
 const { convertItkToVtkImage } = ITKHelper;
 
+interface ViewOrientation {
+  axis: number;
+  viewUp: number[];
+  directionOfProjection?: number[];
+}
+
+interface ViewOrientationMap {
+  [key: string]: ViewOrientation;
+}
+
 export const useMiqaStore = defineStore('miqaStore', () => {
   const file = ref<vtkImageData>();
+  const iIndexSlice = ref(0);
+  const jIndexSlice = ref(0);
+  const kIndexSlice = ref(0);
   const proxyManager = ref<vtkProxyManager>();
   const slice = ref(null);
   const sourceProxy = ref(null);
   const vtkViews = ref<vtkView[]>();
-  const VIEW_ORIENTATIONS = {
+  const VIEW_ORIENTATIONS: ViewOrientationMap = {
     default: {
     axis: 1,
     viewUp: [0, 0, 1],
@@ -84,6 +99,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     initializeView(view);
     initializeSlice(representation, slice);
     initializeCamera(view, representation);
+    updateCrosshairs(view, representation);
 
     console.groupEnd();
   }
@@ -126,7 +142,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     console.groupEnd()
   }
 
-  const getView = (proxyManager: ref<vtkProxyManager>, viewType) => {
+  const getView = (proxyManager: ref<vtkProxyManager>, viewType: string) => {
     console.group('Running getView');
     const [type, name] = viewType.split(':');
     let view: vtkView;
@@ -137,7 +153,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
 
     if (!view) {
       view = proxyManager.value.createProxy('Views', type, { name });
-      proxyManager.value.getSources().forEach((source) => {
+      proxyManager.value.getSources().forEach((source: vtkSourceProxy<any>) => {
         proxyManager.value.getRepresentation(source, view)
       });
       const { axis, directionOfProjection, viewUp } = VIEW_ORIENTATIONS;
@@ -167,6 +183,8 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     camera.setDirectionOfProjection(...newDirectionOfProjection);
     camera.setViewUp(...newViewUp);
     view.resetCamera();
+    sliceDomain(representation); // Just for testing, not actual usage
+    updateCrosshairs(representation, view); // Just for testing, not actual usage
     fill2DView(view);
     console.groupEnd();
     return view;
@@ -222,7 +240,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       return currClosest;
     }
 
-  const fill2DView = (view, w?, h?, resize = true) => {
+  const fill2DView = (view: vtkView, w?: number, h?: number, resize = true) => {
     console.group('fill2DView: Running');
     if (!view) return undefined;
     if (resize) view.resize();
@@ -261,6 +279,90 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     }
     console.groupEnd();
     return scale;
+  }
+
+  const sliceDomain = (representation) => {
+    console.group('Running sliceDomain');
+    if (!representation) return null;
+    const sliceDomain = representation.getPropertyDomainByName('slice');
+    console.debug('sliceDomain', sliceDomain);
+    console.groupEnd();
+    return representation;
+  }
+
+  const updateCrosshairs = (representation, view: vtkView) => {
+    console.group('Running updateCrosshairs');
+    const myCanvas: HTMLCanvasElement = document.getElementById('crosshairs-x') as HTMLCanvasElement;
+    if (myCanvas && myCanvas.getContext('2d')) {
+      const ctx = myCanvas.getContext('2d');
+      console.debug('myCanvas.width', myCanvas.width)
+      console.debug('myCanvas.height', myCanvas.height);
+      ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+      const name = 'x';
+      const ijkName = 'i';
+      const crosshairSet = new CrosshairSet(
+          name,
+          ijkName,
+          representation,
+          view,
+          myCanvas,
+          iIndexSlice.value,
+          jIndexSlice.value,
+          kIndexSlice.value,
+      );
+      console.debug(`crosshairSet`, crosshairSet)
+      const originalColors =  {
+        x: '#fdd835',
+        y: '#4caf50',
+        z: '#b71c1c',
+      };
+      console.debug('originalColors', originalColors);
+      const trueColors = Object.fromEntries(
+          Object.entries(originalColors).map(([axisName, hex]) => [trueAxis(axisName, representation), hex]),
+      );
+      console.debug('trueColors', trueColors);
+      const [displayLine1, displayLine2] = crosshairSet.getCrosshairsForAxis(
+          trueAxis(name, representation),
+          trueColors,
+      );
+      console.debug('displayLine1, displayLine2', displayLine1, displayLine2);
+      drawLine(ctx, displayLine1);
+      drawLine(ctx, displayLine2);
+      console.groupEnd();
+    }
+    console.groupEnd();
+  }
+
+  const drawLine = (ctx, displayLine) => {
+    console.group('drawLine: Running');
+    if (!displayLine) return;
+    ctx.strokeStyle = displayLine.color;
+    ctx.beginPath();
+    ctx.moveTo(...displayLine.start);
+    console.log('displayLine.start', displayLine.start);
+    ctx.lineTo(...displayLine.end);
+    console.log('displayLine.end', displayLine.end);
+    ctx.stroke();
+    console.groupEnd();
+  }
+
+  const trueAxis = (axisName: string, representation) => {
+    console.log('trueAxis: Running');
+    if (!representation.getInputDataSet()) return undefined;
+    const orientation = representation.getInputDataSet().getDirection();
+    const axisNumber = VIEW_ORIENTATIONS[axisName].axis;
+    const axisOrientation = [
+      orientation[axisNumber],
+      orientation[3 + axisNumber],
+      orientation[6 + axisNumber],
+    ].map(
+        (val) => Math.abs(val),
+    );
+    const axisOrdering = ['x', 'y', 'z'];
+    const trueAxis = axisOrdering[
+        axisOrientation.indexOf(Math.max(...axisOrientation))
+        ];
+    return trueAxis;
   }
 
   return {

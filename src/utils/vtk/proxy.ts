@@ -45,7 +45,7 @@ const defaultLinks = [
 ];
 
 function createDefaultView(classFactory, ui?, options?, props?) {
-  console.log('vtk/proxy.js - createDefaultView: Running');
+  // console.log('proxy - createDefaultView: Running');
   return activateOnCreate(
     createProxyDefinition(
       classFactory,
