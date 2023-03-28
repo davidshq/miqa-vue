@@ -9,7 +9,7 @@
     <div class="vtk-viewer">
       <div id="viewer"></div>
       <canvas id="crosshairs-x"
-           ref="crosshairCanvas"
+           ref="crosshairsCanvas"
            class="crosshairs"
            ></canvas>
     </div>
@@ -43,6 +43,8 @@
 .crosshairs {
   z-index: 3;
   position: absolute;
+  width: 500px; /* temporary */
+  height: 500px; /* temporary */
   top: 0;
   bottom: 0;
   left: 0;

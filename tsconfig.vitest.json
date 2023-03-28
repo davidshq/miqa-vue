@@ -4,8 +4,9 @@
   "exclude": [],
   "compilerOptions": {
     "composite": true,
-    "lib": [],
+    "lib": ["esnext"],
     "types": ["node", "jsdom"],
-    "allowJs": true
+    "allowJs": true,
+    "target": "es2020"
   }
 }
