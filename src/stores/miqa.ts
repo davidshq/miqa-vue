@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { readFile } from 'itk-wasm';
 import ITKHelper from '@kitware/vtk.js/Common/DataModel/ITKHelper';
 import vtkProxyManager from '@kitware/vtk.js/Proxy/Core/ProxyManager';
-import vtkImageData from '@kitware/vtk.js/Common/DataModel/ImageData';
+import type vtkImageData from '@kitware/vtk.js/Common/DataModel/ImageData';
 import proxyConfiguration from '../utils/vtk/proxy';
 import macro from '@kitware/vtk.js/macros';
 import { InterpolationType } from '@kitware/vtk.js/Rendering/Core/ImageProperty/Constants';
@@ -12,6 +12,7 @@ import { vec3 } from 'gl-matrix';
 import type vtkView from '@kitware/vtk.js/Proxy/Core/ViewProxy';
 import CrosshairSet from '../utils/crosshairs';
 import type vtkSourceProxy from "@kitware/vtk.js/Proxy/Core/SourceProxy";
+import type vtkSliceRepresentationProxy from "@kitware/vtk.js/Proxy/Representations/SliceRepresentationProxy";
 
 const { convertItkToVtkImage } = ITKHelper;
 
@@ -84,6 +85,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     console.groupEnd();
   }
 
+  // prepareViewer mainly
   const displayImage = () => {
     console.group('Running displayImage');
 
@@ -94,12 +96,17 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     const view = vtkViews.value[0];
     // view.getOpenGLRenderWindow();
 
-    const representation = getRepresentation(proxyManager, view);
+    const representation: vtkSliceRepresentationProxy = getRepresentation(proxyManager, view);
 
-    initializeView(view);
+    initializeView(view, representation);
     initializeSlice(representation, slice);
     initializeCamera(view, representation);
-    updateCrosshairs(view, representation);
+    // Need to test
+    const renderSubscription = view.getInteractor().onRenderEvent(() => {
+      updateCrosshairs(view, representation);
+    })
+
+
 
     console.groupEnd();
   }
@@ -119,6 +126,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     if (!proxyManager.value.getViews().length) {
       ['View2D_Z:z', 'View2D_X:x', 'View2D_Y:y'].forEach((type) => {
         const view = getView(proxyManager, type);
+        console.debug('view', view)
         view.setOrientationAxesVisibility(false);
         view.getRepresentations().forEach((representation) => {
           representation.setInterpolationType(InterpolationType.NEAREST);
@@ -184,7 +192,6 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     camera.setViewUp(...newViewUp);
     view.resetCamera();
     sliceDomain(representation); // Just for testing, not actual usage
-    updateCrosshairs(representation, view); // Just for testing, not actual usage
     fill2DView(view);
     console.groupEnd();
     return view;
@@ -193,15 +200,24 @@ export const useMiqaStore = defineStore('miqaStore', () => {
   const initializeSlice = (representation, slice) => {
     console.group('Running initializeSlice');
     slice.value = representation.getSlice();
+    console.debug('slice', slice);
     console.groupEnd();
   }
 
-  const initializeView = (view: vtkView) => {
+  const initializeView = (view: vtkView, representation) => {
     console.group('Running initializeView');
     // Set DOM element
     const viewer = document.getElementById('viewer');
     view.setContainer(viewer);
     fill2DView(view);
+    console.debug('view.getName()', view.getName());
+    if (view.getName() !== 'default') {
+      // Need to test
+      const modifiedSubscription = representation.onModified(() => {
+        slice.value = representation.getSlice();
+      })
+    }
+
     console.groupEnd();
   }
 
@@ -221,21 +237,26 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     let currClosest = null;
     let currMax = 0;
     const inputVectorAxis = inputVector.findIndex((value) => value !== 0);
+    console.debug('inputVectorAxis', inputVectorAxis);
     for (let i = 0; i < 3; i += 1) {
       const currColumn = matrix.slice(i * 3, i * 3 + 3);
+      console.debug('currColumn', currColumn)
       const currValue = Math.abs(currColumn[inputVectorAxis]);
         if (currValue > currMax) {
           currClosest = currColumn;
           currMax = currValue;
         }
       }
+    console.debug('currMax', currMax);
       const flipCurrClosest = vec3.dot(
         inputVector,
         currClosest,
       );
+      console.debug('flipCurrClosest', flipCurrClosest);
       if (flipCurrClosest < 0) {
         currClosest = currClosest.map((value) => value * -1);
       }
+      console.debug('currClosest', currClosest)
       console.groupEnd();
       return currClosest;
     }
@@ -290,7 +311,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     return representation;
   }
 
-  const updateCrosshairs = (representation, view: vtkView) => {
+  const updateCrosshairs = (view: vtkView, representation: vtkSliceRepresentationProxy) => {
     console.group('Running updateCrosshairs');
     const myCanvas: HTMLCanvasElement = document.getElementById('crosshairs-x') as HTMLCanvasElement;
     if (myCanvas && myCanvas.getContext('2d')) {
@@ -298,10 +319,10 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       console.debug('myCanvas.width', myCanvas.width)
       console.debug('myCanvas.height', myCanvas.height);
       ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-      const name = 'x';
+      const viewName = 'x';
       const ijkName = 'i';
       const crosshairSet = new CrosshairSet(
-          name,
+          viewName,
           ijkName,
           representation,
           view,
@@ -322,7 +343,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
       );
       console.debug('trueColors', trueColors);
       const [displayLine1, displayLine2] = crosshairSet.getCrosshairsForAxis(
-          trueAxis(name, representation),
+          trueAxis(viewName, representation),
           trueColors,
       );
       console.debug('displayLine1, displayLine2', displayLine1, displayLine2);
@@ -347,7 +368,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
   }
 
   const trueAxis = (axisName: string, representation) => {
-    console.log('trueAxis: Running');
+    console.group('Running trueAxis');
     if (!representation.getInputDataSet()) return undefined;
     const orientation = representation.getInputDataSet().getDirection();
     const axisNumber = VIEW_ORIENTATIONS[axisName].axis;
@@ -362,6 +383,7 @@ export const useMiqaStore = defineStore('miqaStore', () => {
     const trueAxis = axisOrdering[
         axisOrientation.indexOf(Math.max(...axisOrientation))
         ];
+    console.groupEnd();
     return trueAxis;
   }
 
