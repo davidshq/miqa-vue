@@ -16,9 +16,9 @@
   "dependencies": {
     "@kitware/vtk.js": "^26.8.2",
     "curry": "^1.2.0",
-    "itk-image-io": "^1.0.0-b.18",
-    "itk-mesh-io": "^1.0.0-b.18",
-    "itk-wasm": "^1.0.0-b.18",
+    "itk-image-io": "^1.0.0-b.158",
+    "itk-mesh-io": "^1.0.0-b.158",
+    "itk-wasm": "^1.0.0-b.158",
     "pinia": "^2.0.32",
     "vue": "^3.2.47",
     "vue-router": "^4.1.6"
